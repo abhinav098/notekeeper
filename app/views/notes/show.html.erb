@@ -1,7 +1,22 @@
-<p>Title: <%= @note.title %></p>
-<p>Body: <%= @note.body %></p>
-<p>Tags: <% @note.tags.each do |tag| %><%= tag.name %><small>(<%= tag.notes.count %>),</small><% end %></p>
-<p><small>Created <%= time_ago_in_words(@note.created_at) %> ago</small></p>
+<div class="row">
+<h3><%= @note.title %></h3>
+	<p><%= @note.body %></p>
+	<p><% @note.tags.each do |tag| %><%= link_to "#{tag.name}(#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button success tiny round' %><% end %></p>
+	<p>Created <%= time_ago_in_words(@note.created_at) %> ago</p>
+	<% if @note.user == current_user %>
+		<%= link_to 'Edit', edit_note_path(@note), class: "button success tiny" %>
+		<%= link_to ' Delete', note_path(@note), method: :delete, class: "button alert tiny" %>
+		<h3>Shares</h3>
 
-<%= link_to 'Edit', edit_note_path(@note) %>
-<%= link_to ' Delete', note_path(@note), method: :delete %>
+		<%= form_for [@note, Share.new] do |f| %>
+		  <%= f.label :permission %>
+			<%= f.select :permission, Share.permissions.keys.map { |k| [k.humanize, k] }%>
+			<%= f.label :user %>
+			<%= f.select :user_id, User.all.map{|k| [k.email, k.id]} %>
+			<%= f.submit "Share", class: 'button tiny round' %>
+		<% end %>
+	<% end %>
+	<ul>
+	<%= render @note.shares %>
+	</ul>
+</div>

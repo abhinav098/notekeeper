@@ -2,6 +2,7 @@ class Note < ActiveRecord::Base
   belongs_to :user
   has_many :tags, through: :taggings
   has_many :taggings, dependent: :destroy
+  has_many :shares, as: :shareable
 
   def all_tags=(names)
   	self.tags = names.split(",").map do |name|

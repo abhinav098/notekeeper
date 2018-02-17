@@ -60,6 +60,9 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.21)
+    foundation-rails (5.4.5.0)
+      railties (>= 3.1.0)
+      sass (>= 3.2.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     i18n (0.9.5)
@@ -84,6 +87,7 @@ GEM
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
+    pg (1.0.0)
     rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -168,8 +172,10 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   devise
+  foundation-rails
   jbuilder (~> 2.0)
   jquery-rails
+  pg
   rails (= 4.2.9)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

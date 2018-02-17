@@ -1,0 +1,6 @@
+<% @notes.each do |note| %>
+	<p><%= link_to note.title, note%></p>
+	<p><%= note.body%></p>
+<% end %>
+
+<%= link_to 'Log Out', destroy_user_session_path, method: :delete if user_signed_in? %>

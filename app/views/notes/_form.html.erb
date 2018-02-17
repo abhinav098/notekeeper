@@ -1,0 +1,9 @@
+<%= form_for @note do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %></br>
+  <%= f.label :note %>
+  <%= f.text_area :body %></br>
+  <%= f.label :tags %>
+  <%= f.text_field :all_tags, placeholder: "Tags separated with comma" %></br>
+  <%= f.submit %>
+<% end %>

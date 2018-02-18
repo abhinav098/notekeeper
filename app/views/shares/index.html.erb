@@ -19,7 +19,7 @@
           <td><%= share.sharer.email %></td>
           <td><%= share.permission %></td>
           <td><%= share.shareable_type == "Note" ? share.shareable.body : share.shareable.note.body %></td> 
-          <td><%= link_to 'Remove Access', share, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to 'Remove Access', share, method: :delete, data: { confirm: 'Are you sure?' } if share.sharer == current_user %></td>
         </tr>
       <% end %>
     </tbody>

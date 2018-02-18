@@ -25,7 +25,7 @@
       <% unless snote.sharer == current_user %>
         <div class="panel">
           <h3><%= snote.note.title %></h3>
-          <p><b>Author:</b> <%= snote.user.email %></p>
+          <p><b>Author:</b> <%= snote.sharer.email %></p>
           <p><b>Permission:</b> <%= snote.permission.capitalize %>
           <p><%= snote.note.body %></p>
           <p><b>Tags:</b> <% snote.note.tags.each do |tag| %><%= link_to "#{tag.name}(#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button secondary tiny round' %><% end %></p>

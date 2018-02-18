@@ -22,7 +22,10 @@ class NotesController < ApplicationController
 			redirect_to @note
 			flash[:notice] = "Note created Successfully"
 		else
-			redirect_to :new
+			redirect_to new_note_path
+			@note.errors.full_messages.each do |error|
+				flash[:notice] = error
+			end 
 		end
 	end
 	
@@ -31,7 +34,10 @@ class NotesController < ApplicationController
 			redirect_to @note
 			flash[:notice] = "Note updated Successfully"
 		else
-			redirect_to :edit
+			redirect_to edit_note_path(@note)
+			@note.errors.full_messages.each do |error|
+				flash[:notice] = error
+			end 
 		end	
 	end
 	

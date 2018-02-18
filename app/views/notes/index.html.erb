@@ -5,7 +5,7 @@
         <h3><%= note.title %></h3>
         <p><b>Author:</b> <%= note.user.email %></p>
         <p><%= note.body %></p>
-        <p><% note.tags.each do |tag| %><%= link_to "#{tag.name} (#{tag.notes.count}), ", notes_path(tag_name: tag.name, tag_id: tag.id)%><% end %></p>
+        <p><% note.tags.each do |tag| %><%= link_to "#{tag.name} (#{tag.notes.count}), ", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button secondary tiny round'%><% end %></p>
         <%= link_to 'Show', note, class: 'button tiny round success' %>
         <%= link_to 'Edit', edit_note_path(note), class: 'button tiny round warning'  %>
         <%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny round alert'%>

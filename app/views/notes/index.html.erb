@@ -47,9 +47,9 @@
             <%= f.hidden_field :shareable_type, value: snote.class %>
             <%= select("share", "user_id", User.where.not(id: [current_user.id] + Share.where(note_id: snote.note_id).pluck(:user_id)).collect {|p| [ p.email, p.id ] }) %>
             <% if snote.reader? %>
-              <%= select("share", "permissions", [[ 'read', 0 ]]) %>
+              <%= select("share", "permissions", [[ 'reader', 0 ]]) %>
             <% elsif snote.updater? %>
-              <%= select("share", "permissions", [[ 'read', 0 ], ['update_note', 1]]) %>
+              <%= select("share", "permissions", [[ 'reader', 0 ], ['updater', 1]]) %>
             <% else %>
               <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
             <% end %>

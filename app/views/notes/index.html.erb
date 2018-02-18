@@ -16,7 +16,7 @@
           <%= f.hidden_field :shareable_id, value: note.id %>
           <%= f.hidden_field :shareable_type, value: note.class %>
           <%= select("share", "user_id", User.where.not(id: current_user.id).collect {|p| [ p.email, p.id ] }) %>
-          <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+          <%= select("share", "permission", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
           <%= f.submit 'Share', class: "button tiny round success"  %>
         <% end %>
       </div>
@@ -26,7 +26,7 @@
         <div class="panel">
           <h3><%= snote.note.title %></h3>
           <p><b>Author:</b> <%= snote.user.email %></p>
-          <p><b>Permission:</b> <%= snote.permissions.capitalize %>
+          <p><b>Permission:</b> <%= snote.permission.capitalize %>
           <p><%= snote.note.body %></p>
           <p><b>Tags:</b> <% snote.note.tags.each do |tag| %><%= link_to "#{tag.name}(#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button secondary tiny round' %><% end %></p>
           <% if snote.reader? %>
@@ -46,7 +46,7 @@
             <%= f.hidden_field :shareable_id, value: snote.id %>
             <%= f.hidden_field :shareable_type, value: snote.class %>
             <%= select("share", "user_id", User.where.not(id: [current_user.id, snote.sharer_id]).collect {|p| [ p.email, p.id ] }) %>
-            <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+            <%= select("share", "permission", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
             <%= f.submit 'Share', class: "button tiny success round" %>
           <% end %>
         </div>

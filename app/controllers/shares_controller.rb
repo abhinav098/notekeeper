@@ -40,6 +40,6 @@ private
   end
 
   def share_params
-    params.require(:share).permit(:user_id, :sharer, :permissions, :shareable_id, :shareable_type, :note_id)
+    params.require(:share).permit(:user_id, :sharer, :permission, :shareable_id, :shareable_type, :note_id)
   end
 end

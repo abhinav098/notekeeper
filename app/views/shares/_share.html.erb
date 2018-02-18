@@ -1,13 +1,20 @@
 Shared with: <%= share.user == current_user ? 'You' : share.user.email %></br>
 Permission: <%= share.permission %></br>
 <%= link_to 'Remove Access', share_path(share), method: :delete, class: 'button alert tiny round' %>
-<h5 align="center"> Share Further? </h5>
 <li>
-<%= form_for [share, Share.new] do |f| %>
-	<%= f.label :permission %>
-	<%= f.select :permission, Share.permissions.keys.map { |k| [k.humanize, k] }%>
-	<%= f.label :user %>
-	<%= f.select :user_id, User.all.map{|k| [k.email, k.id]} %>
-	<%= f.submit "Share", class: 'button tiny round' %>
-<% end %>
+	<div class="row">
+		<div class="small-5 offset-2 columns">
+			<h5 align="center"> Share Further? </h5>
+			<%= form_for [share, Share.new] do |f| %>
+				<%= f.label :permission %>
+				<%= f.select :permission, Share.permissions.keys.map { |k| [k.humanize, k] }%>
+				<%= f.label :user %>
+				<%= f.select :user_id, User.all.map{|k| [k.email, k.id]} %>
+				<%= f.submit "Share", class: 'button tiny round' %>
+			<% end %>
+		</div>
+	</div>
+	<ul>
+		<%= render share.shares %>
+	<ul>	
 </li>

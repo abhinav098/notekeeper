@@ -1,5 +1,6 @@
 Shared with: <%= share.user == current_user ? 'You' : share.user.email %></br>
-Permission: <%= share.permission %>
+Permission: <%= share.permission %></br>
+<%= link_to 'Remove Access', share_path(share), method: :delete, class: 'button alert tiny round' %>
 <h5 align="center"> Share Further? </h5>
 <li>
 <%= form_for [share, Share.new] do |f| %>

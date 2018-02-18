@@ -3,11 +3,13 @@
 	<p><%= @note.body %></p>
 	<p><% @note.tags.each do |tag| %><%= link_to "#{tag.name}(#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button success tiny round' %><% end %></p>
 	<p>Created <%= time_ago_in_words(@note.created_at) %> ago</p>
-	<% if @note.user == current_user %>
+	<% if (@note.user == current_user) || Share.find_by(shareable: @note, user_id: current_user.id)&.updater? %>
 		<%= link_to 'Edit', edit_note_path(@note), class: "button success tiny" %>
-		<%= link_to ' Delete', note_path(@note), method: :delete, class: "button alert tiny" %>
+		<%= link_to ' Delete', note_path(@note), method: :delete, class: "button alert tiny" if @note.user == current_user%>
+	<% end %>
 		<h3>Shares</h3>
 
+	<% if (@note.user == current_user)%>
 		<%= form_for [@note, Share.new] do |f| %>
 		  <%= f.label :permission %>
 			<%= f.select :permission, Share.permissions.keys.map { |k| [k.humanize, k] }%>

@@ -1,5 +1,5 @@
 class SharesController < ApplicationController
-	before_action :find_shareable
+	before_action :find_shareable, except: :destroy 
 
   def new
     @shareable = Shareable.new
@@ -16,8 +16,10 @@ class SharesController < ApplicationController
   end
 
   def destroy
+    @shareable = Share.find_by_id(params[:id])
+    return unless @shareable
     if @shareable.destroy
-      redirect_to :back, flash[:success] = "Removed Access successfully"
+      redirect_to notes_path, notice: "Removed Access successfully"
     end
   end
 

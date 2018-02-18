@@ -1,7 +1,9 @@
 class Share < ActiveRecord::Base
-  belongs_to :shareable, polymorphic: true
-  has_many :shares, as: :shareable, dependent: :destroy
   belongs_to :user
-
-  enum permission: [ :reader, :updater, :owner ]
+  belongs_to :note
+  belongs_to :shareable, polymorphic: true
+  belongs_to :sharer, class_name: 'User'
+  has_many :shares, as: :shareable, dependent: :destroy
+  PERMISSIONS = %w[reader updater owner].freeze
+  enum permissions: PERMISSIONS
 end

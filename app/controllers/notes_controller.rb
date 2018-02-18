@@ -3,12 +3,12 @@ class NotesController < ApplicationController
 	before_action :find_note, only: [:show,:edit,:update,:destroy]
 
 	def index
-		if params[:uid]
-			@notes = Note.where(user_id: params[:uid])
-		elsif params[:tag_id]
-			@notes = Tag.find(params[:tag_id]).notes rescue Note.all
+		if params[:tag_id]
+			@notes = Tag.find(params[:tag_id]).notes rescue current_user.notes
+   		@notes_shared = current_user.shares
 		else
-			@notes = Note.all
+			@notes = current_user.notes
+   			@notes_shared = current_user.shares
 		end
 	end
 	
@@ -34,6 +34,7 @@ class NotesController < ApplicationController
 			redirect_to :edit
 		end	
 	end
+	
 	def destroy
 		@note.destroy
 		redirect_to notes_path

@@ -1,0 +1,27 @@
+<div class="row">
+  <h3 align = 'center'>Manage Accesses</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Shared With</th>
+        <th>Shared By</th>
+        <th>Permission</th>
+        <th>Note</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @shares.each do |share| %>
+        <tr>
+          <td><%= share.user.email %></td>
+          <td><%= share.sharer.email %></td>
+          <td><%= share.permissions %></td>
+          <td><%= share.shareable_type == "Note" ? share.shareable.body : share.shareable.note.body %></td> 
+          <td><%= link_to 'Remove Access', share, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

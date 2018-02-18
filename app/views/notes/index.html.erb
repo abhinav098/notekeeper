@@ -1,23 +1,61 @@
 <div class="row">
-	<% if @notes.any? %>
-		<% @notes.each do |note| %>
-			<% share = Share.find_by(shareable_id: note.id, user_id: current_user.id) %>
-			<% if share || note.user == current_user %>
-				<div class="panel">
-					<p><%= note.body%></p>
-					<p align = "center"><%= link_to note.title, note, class: 'button tiny round success' %></p>
-				</div>
-			<%# else %>
-				<!-- <div class="row panel">
-					<p align = 'center'><%#= link_to 'Create new Note', new_note_path, class: 'button round success'%></p>
-				</div>	 -->
-			<% end %>	
-
-		<% end %>
-	<% else %>	
-		<div class="row panel">
-			<h3 align="center">You have not created any note.</h3>
-			<p align = 'center'><%= link_to 'Create new Note', new_note_path, class: 'button round success'%></p>
-		</div>
-	<% end %>	
+  <% if @notes.any? || @notes_shared.any? %>
+    <% @notes.each do |note| %>
+      <div class="panel">
+        <h3><%= note.title %></h3>
+        <p><b>Author:</b> <%= note.user.email %></p>
+        <p><%= note.body %></p>
+        <p><% note.tags.each do |tag| %><%= link_to "#{tag.name} (#{tag.notes.count}), ", notes_path(tag_name: tag.name, tag_id: tag.id)%><% end %></p>
+        <%= link_to 'Show', note, class: 'button tiny round success' %>
+        <%= link_to 'Edit', edit_note_path(note), class: 'button tiny round warning'  %>
+        <%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny round alert'%>
+        <p> Share?(select user and the access) </p>
+        <%= form_for Share.new do |f| %>
+          <%= f.hidden_field :note_id, value: note.id%>
+          <%= f.hidden_field :sharer_id, value: current_user.id %>
+          <%= f.hidden_field :shareable_id, value: note.id %>
+          <%= f.hidden_field :shareable_type, value: note.class %>
+          <%= select("share", "user_id", User.where.not(id: current_user.id).collect {|p| [ p.email, p.id ] }) %>
+          <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+          <%= f.submit 'Share', class: "button tiny round success"  %>
+        <% end %>
+      </div>
+    <% end %>
+    <% @notes_shared.each do |snote| %>
+      <% unless snote.sharer == current_user %>
+        <div class="panel">
+          <h3><%= snote.note.title %></h3>
+          <p><b>Author:</b> <%= snote.user.email %></p>
+          <p><b>Permission:</b> <%= snote.permissions.capitalize %>
+          <p><%= snote.note.body %></p>
+          <p><b>Tags:</b> <% snote.note.tags.each do |tag| %><%= link_to "#{tag.name}(#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button secondary tiny round' %><% end %></p>
+          <% if snote.reader? %>
+            <%= link_to 'Show', snote.note, class: 'button tiny notice round' %>
+          <% elsif snote.updater? %>
+            <%= link_to 'Show', snote.note, class: 'button tiny notice round' %>
+            <%= link_to 'Edit', edit_note_path(snote.note), class: 'button tiny success round' %>
+          <% else %>
+            <%= link_to 'Show', snote.note, class: 'button tiny notice round' %>
+            <%= link_to 'Edit', edit_note_path(snote.note), class: 'button tiny success round' %>
+            <%= link_to 'Destroy', snote.note, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny warning round' %>
+          <% end %>
+          <p> Share?(select user and the access) </p>  
+          <%= form_for Share.new do |f| %>
+            <%= f.hidden_field :note_id, value: snote.note_id%>
+            <%= f.hidden_field :sharer_id, value: current_user.id %>
+            <%= f.hidden_field :shareable_id, value: snote.id %>
+            <%= f.hidden_field :shareable_type, value: snote.class %>
+            <%= select("share", "user_id", User.where.not(id: [current_user.id, snote.sharer_id]).collect {|p| [ p.email, p.id ] }) %>
+            <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+            <%= f.submit 'Share', class: "button tiny success round" %>
+          <% end %>
+        </div>
+      <% end %>  
+    <% end %>
+  <% else %>
+    <div class="panel">
+      <h3 align = 'center'>You haven't created any notes </h3>
+      <p align = "center"><%= link_to 'Create New Note', new_note_path, class: 'button large success round'%></p>
+    </div>
+  <% end %>
 </div>

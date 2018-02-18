@@ -24,15 +24,19 @@ ActiveRecord::Schema.define(version: 20180217110903) do
   add_index "notes", ["user_id"], name: "index_notes_on_user_id"
 
   create_table "shares", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "sharer_id"
+    t.integer  "note_id"
+    t.integer  "permissions",    default: 0
     t.integer  "shareable_id"
     t.string   "shareable_type"
-    t.integer  "permission",     default: 0
-    t.integer  "user_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
 
+  add_index "shares", ["note_id"], name: "index_shares_on_note_id"
   add_index "shares", ["shareable_type", "shareable_id"], name: "index_shares_on_shareable_type_and_shareable_id"
+  add_index "shares", ["sharer_id"], name: "index_shares_on_sharer_id"
   add_index "shares", ["user_id"], name: "index_shares_on_user_id"
 
   create_table "taggings", force: :cascade do |t|

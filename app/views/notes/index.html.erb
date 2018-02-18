@@ -1,11 +1,23 @@
 <div class="row">
-	<% @notes.each do |note| %>
-		<% share = Share.find_by(shareable: note, user_id: current_user.id) %>
-		<% if share || note.user == current_user %>
-			<div class="panel">
-				<p><%= note.body%></p>
-				<p align = "center"><%= link_to note.title, note, class: 'button tiny round success' %></p>
-			</div>
-		<% end %>	
-	<% end %>
+	<% if @notes.any? %>
+		<% @notes.each do |note| %>
+			<% share = Share.find_by(shareable_id: note.id, user_id: current_user.id) %>
+			<% if share || note.user == current_user %>
+				<div class="panel">
+					<p><%= note.body%></p>
+					<p align = "center"><%= link_to note.title, note, class: 'button tiny round success' %></p>
+				</div>
+			<%# else %>
+				<!-- <div class="row panel">
+					<p align = 'center'><%#= link_to 'Create new Note', new_note_path, class: 'button round success'%></p>
+				</div>	 -->
+			<% end %>	
+
+		<% end %>
+	<% else %>	
+		<div class="row panel">
+			<h3 align="center">You have not created any note.</h3>
+			<p align = 'center'><%= link_to 'Create new Note', new_note_path, class: 'button round success'%></p>
+		</div>
+	<% end %>	
 </div>

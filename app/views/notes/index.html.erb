@@ -15,7 +15,7 @@
           <%= f.hidden_field :sharer_id, value: current_user.id %>
           <%= f.hidden_field :shareable_id, value: note.id %>
           <%= f.hidden_field :shareable_type, value: note.class %>
-          <%= select("share", "user_id", User.where.not(id: current_user.id).collect {|p| [ p.email, p.id ] }) %>
+          <%= select("share", "user_id", User.where.not(id: [current_user.id] + Share.where(note_id: note.id).pluck(:user_id)).collect {|p| [ p.email, p.id ] }) %>
           <%= select("share", "permission", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
           <%= f.submit 'Share', class: "button tiny round success"  %>
         <% end %>
@@ -45,8 +45,14 @@
             <%= f.hidden_field :sharer_id, value: current_user.id %>
             <%= f.hidden_field :shareable_id, value: snote.id %>
             <%= f.hidden_field :shareable_type, value: snote.class %>
-            <%= select("share", "user_id", User.where.not(id: [current_user.id, snote.sharer_id]).collect {|p| [ p.email, p.id ] }) %>
-            <%= select("share", "permission", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+            <%= select("share", "user_id", User.where.not(id: [current_user.id] + Share.where(note_id: snote.note_id).pluck(:user_id)).collect {|p| [ p.email, p.id ] }) %>
+            <% if snote.reader? %>
+              <%= select("share", "permissions", [[ 'read', 0 ]]) %>
+            <% elsif snote.updater? %>
+              <%= select("share", "permissions", [[ 'read', 0 ], ['update_note', 1]]) %>
+            <% else %>
+              <%= select("share", "permissions", Share::PERMISSIONS.each_with_index {|p, i| [ p, i ] }) %>
+            <% end %>
             <%= f.submit 'Share', class: "button tiny success round" %>
           <% end %>
         </div>

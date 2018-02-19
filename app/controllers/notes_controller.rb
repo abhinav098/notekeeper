@@ -19,7 +19,7 @@ class NotesController < ApplicationController
 	def create
 		@note = current_user.notes.build(note_params)
 		if @note.save
-			redirect_to @note
+			redirect_to :back
 			flash[:notice] = "Note created Successfully"
 		else
 			redirect_to new_note_path
@@ -31,7 +31,7 @@ class NotesController < ApplicationController
 	
 	def update
 		if @note.update(note_params)
-			redirect_to @note
+			redirect_to :back
 			flash[:notice] = "Note updated Successfully"
 		else
 			redirect_to edit_note_path(@note)

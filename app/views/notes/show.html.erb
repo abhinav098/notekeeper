@@ -1,7 +1,7 @@
 <div class="row">
 <h3><%= @note.title %></h3>
 	<p><%= @note.body %></p>
-	<p><b>Tags:</b> <% @note.tags.each do |tag| %><%= link_to "#{tag.name} (#{tag.notes.count}), ", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button tiny round secondary' %><% end %></p>
+	<p><b>Tags:</b> <% @note.tags.each do |tag| %><%= link_to "#{tag.name} (#{tag.notes.count})", notes_path(tag_name: tag.name, tag_id: tag.id), class: 'button tiny round secondary' %><% end %></p>
   <% if @note.user == current_user %>
     <%= link_to 'Edit', edit_note_path(@note), class: 'button tiny round warning'  %>
     <%= link_to 'Destroy', @note, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny round alert'%>
